@@ -1,20 +1,21 @@
 {
   "name": "framefetch",
-  "version": "0.1.0",
-  "description": "Tiny zero-dependency client for the FrameFetch video data API — any social-video URL to metadata, transcript, insights, and parametric frames. Built for AI agents (REST + MCP, pay-per-call or x402 USDC).",
+  "version": "0.2.0",
+  "description": "Tiny zero-dependency client for the FrameFetch video data API — any social-video URL to metadata, transcript, insights, and parametric frames. Built for AI agents (REST + MCP, pay-per-call or x402 USDC). Ships a local stdio MCP bridge.",
   "type": "module",
   "main": "index.js",
   "module": "index.js",
   "types": "index.d.ts",
+  "bin": { "framefetch-mcp": "mcp.js" },
   "exports": {
     ".": {
       "types": "./index.d.ts",
       "import": "./index.js"
     }
   },
-  "files": ["index.js", "index.d.ts", "README.md"],
+  "files": ["index.js", "index.d.ts", "mcp.js", "mcp-tools.json", "README.md"],
   "engines": { "node": ">=18" },
-  "scripts": { "test": "node --test" },
+  "scripts": { "test": "node --test", "mcp": "node mcp.js" },
   "keywords": [
     "framefetch", "video", "transcript", "video-transcript", "youtube", "tiktok",
     "instagram", "reddit", "pinterest", "video-metadata", "frames", "video-frames",

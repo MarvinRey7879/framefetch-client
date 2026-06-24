@@ -92,6 +92,27 @@ claude mcp add --transport http framefetch https://framefetch.net/mcp \
   --header "Authorization: <YOUR_FRAMEFETCH_KEY>"
 ```
 
+### Local stdio bridge
+
+Prefer a local stdio server (Claude Desktop, sandboxes, no inbound HTTP)? This package
+ships `framefetch-mcp`, a zero-dependency stdio↔HTTP bridge that exposes the same tools
+and forwards calls to `framefetch.net`:
+
+```json
+{
+  "mcpServers": {
+    "framefetch": {
+      "command": "npx",
+      "args": ["-y", "framefetch-mcp"],
+      "env": { "FRAMEFETCH_API_KEY": "<YOUR_FRAMEFETCH_KEY>" }
+    }
+  }
+}
+```
+
+`tools/list` works with no key; tool calls use `FRAMEFETCH_API_KEY` (or x402). Override the
+endpoint with `FRAMEFETCH_MCP_URL`.
+
 ## Pay without an account (x402)
 
 Autonomous agents can pay per call in **USDC via x402** on Base — no signup, no human in the loop. Discoverable in the x402 Bazaar and at [`/.well-known/x402.json`](https://framefetch.net/.well-known/x402.json). Humans can use a free tier, prepaid credits, or a Stripe card.

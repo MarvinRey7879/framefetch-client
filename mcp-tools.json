@@ -1,0 +1,92 @@
+[
+  {
+    "name": "framefetch_extract",
+    "description": "Extract structured data from ONE public social-video URL (YouTube incl. Shorts, TikTok, Instagram Reels, Pinterest, Reddit). Purpose: turn a video link into metadata (title, author, duration, date), insights (views/likes/comments), a transcript (captions, or Whisper when there are none — works on TikTok/Reddit too), and/or parametrically-sampled video frames. When to use: you have a video URL and need its text, stats, or frames for analysis, summarization, or grounding a model. When NOT to use: non-video pages, private/login-walled content, or bulk crawling (one URL per call). Returns: one JSON object containing only the requested fields plus a `cost` block (micro-USD). Frames come back as time-limited signed image URLs. Cost/latency: metadata is sub-cent and fast; transcript is billed per audio-minute and frames per frame (both also incur bandwidth) — request only the fields you need and downscale frames via `width` to control cost. Billing: a free tier covers light use; agents can also pay per call with x402 (USDC) with no account. Example: { \"url\": \"https://www.youtube.com/watch?v=...\", \"fields\": [\"metadata\",\"transcript\"], \"frames\": { \"mode\": \"fps\", \"fps\": 1, \"width\": 480 } }",
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "url": {
+          "type": "string",
+          "description": "Public video URL from a supported platform."
+        },
+        "fields": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "enum": [
+              "metadata",
+              "insights",
+              "transcript",
+              "frames"
+            ]
+          },
+          "description": "Which data to return. Default [\"metadata\"]. Request the minimum you need."
+        },
+        "frames": {
+          "type": "object",
+          "description": "Frame-sampling spec; required when \"frames\" is requested.",
+          "properties": {
+            "mode": {
+              "type": "string",
+              "enum": [
+                "all",
+                "every_n",
+                "fps",
+                "range"
+              ]
+            },
+            "n": {
+              "type": "number",
+              "description": "every_n: take every Nth source frame"
+            },
+            "fps": {
+              "type": "number",
+              "description": "fps/range: frames per second (max 60)"
+            },
+            "from": {
+              "type": "number",
+              "description": "range: start second"
+            },
+            "to": {
+              "type": "number",
+              "description": "range: end second"
+            },
+            "format": {
+              "type": "string",
+              "enum": [
+                "jpg",
+                "png",
+                "webp"
+              ]
+            },
+            "width": {
+              "type": "number",
+              "description": "downscale width in px (16–7680)"
+            }
+          },
+          "required": [
+            "mode"
+          ]
+        },
+        "verbosity": {
+          "type": "string",
+          "enum": [
+            "concise",
+            "detailed"
+          ]
+        }
+      },
+      "required": [
+        "url"
+      ]
+    }
+  },
+  {
+    "name": "framefetch_platform_capabilities",
+    "description": "Return a JSON matrix of which data types (metadata, insights, transcript, frames) each supported platform provides — YouTube, YouTube Shorts, TikTok, Instagram Reels, Pinterest, Reddit. Purpose: check what is available for a platform BEFORE calling framefetch_extract, so you only request supported fields. No input required.",
+    "inputSchema": {
+      "type": "object",
+      "properties": {}
+    }
+  }
+]
