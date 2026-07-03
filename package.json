@@ -1,7 +1,7 @@
 {
   "name": "framefetch",
-  "version": "0.2.0",
-  "description": "Tiny zero-dependency client for the FrameFetch video data API — any social-video URL to metadata, transcript, insights, and parametric frames. Built for AI agents (REST + MCP, pay-per-call or x402 USDC). Ships a local stdio MCP bridge.",
+  "version": "0.3.0",
+  "description": "Tiny zero-dependency client for the FrameFetch video data API — any social-video URL to metadata, transcript, insights, parametric frames, and on-screen text (OCR). Built for AI agents (REST + MCP, pay-per-call or x402 USDC). Ships a local stdio MCP bridge.",
   "type": "module",
   "main": "index.js",
   "module": "index.js",
@@ -19,7 +19,7 @@
   "keywords": [
     "framefetch", "video", "transcript", "video-transcript", "youtube", "tiktok",
     "instagram", "reddit", "pinterest", "video-metadata", "frames", "video-frames",
-    "ai-agent", "mcp", "x402", "api-client", "whisper", "scraper"
+    "ai-agent", "mcp", "x402", "api-client", "whisper", "scraper", "ocr", "text-extraction"
   ],
   "homepage": "https://framefetch.net",
   "repository": { "type": "git", "url": "git+https://github.com/MarvinRey7879/framefetch-client.git" },

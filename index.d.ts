@@ -1,7 +1,7 @@
 // Type definitions for the FrameFetch client.
 
 export type Platform = 'youtube' | 'tiktok' | 'instagram' | 'pinterest' | 'reddit';
-export type Field = 'metadata' | 'insights' | 'transcript' | 'frames';
+export type Field = 'metadata' | 'insights' | 'transcript' | 'frames' | 'text_overlay';
 
 export interface FrameSpec {
   /** 'all' | 'everyNth' | 'fps' | 'range' */
@@ -35,6 +35,9 @@ export interface Insights {
 
 export interface FrameRef { index: number; url: string; tSec: number; }
 
+export interface OcrLine { text: string; confidence: number; bbox: [number, number, number, number]; }
+export interface TextOverlayRef { index: number; text: string; lines: OcrLine[]; }
+
 export interface ExtractResult {
   platform: string;
   url: string;
@@ -42,6 +45,8 @@ export interface ExtractResult {
   insights?: Insights;
   transcript?: { text: string; source: 'captions' | 'whisper' };
   frames?: { count: number; first?: FrameRef; last?: FrameRef; items?: FrameRef[] };
+  /** On-screen text per frame (OCR) — requires "frames" to also be requested. */
+  textOverlay?: TextOverlayRef[];
   cost: { totalMicros: number };
   cached?: boolean;
 }

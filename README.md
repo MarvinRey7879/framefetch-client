@@ -5,20 +5,20 @@
 <h1 align="center">FrameFetch</h1>
 
 <p align="center">
-  <b>Any social-video URL → metadata, transcript, insights &amp; frames.</b><br>
+  <b>Any social-video URL → metadata, transcript, insights, frames &amp; on-screen text (OCR).</b><br>
   Agent-first video data API + MCP server. Pay per call, or with x402 (USDC) — no account.
 </p>
 
 <p align="center">
-  <a href="https://www.npmjs.com/package/framefetch"><img src="https://img.shields.io/npm/v/framefetch?color=5ee0c0" alt="npm"></a>
-  <a href="https://framefetch.net"><img src="https://img.shields.io/badge/website-framefetch.net-4493f8" alt="website"></a>
-  <a href="https://framefetch.net/status"><img src="https://img.shields.io/badge/status-live-3fb950" alt="status"></a>
-  <img src="https://img.shields.io/badge/license-MIT-9aa7b8" alt="MIT">
+  <a href="https://www.npmjs.com/package/framefetch"><img src="https://img.shields.io/npm/v/framefetch?color=ff5a36" alt="npm"></a>
+  <a href="https://framefetch.net"><img src="https://img.shields.io/badge/website-framefetch.net-ff8562" alt="website"></a>
+  <a href="https://framefetch.net/status"><img src="https://img.shields.io/badge/status-live-4ad8a0" alt="status"></a>
+  <img src="https://img.shields.io/badge/license-MIT-9a9fa6" alt="MIT">
 </p>
 
 ---
 
-FrameFetch turns one **YouTube, YouTube Shorts, TikTok, Instagram Reels, Pinterest, or Reddit** video URL into a single JSON response: **metadata**, **engagement insights**, a **transcript** (captions or Whisper), and **parametrically-sampled frames** (every Nth / 1-per-second / a time range, at any width). Built API-first and MCP-first for AI agents.
+FrameFetch turns one **YouTube, YouTube Shorts, TikTok, Instagram Reels, Pinterest, or Reddit** video URL into a single JSON response: **metadata**, **engagement insights**, a **transcript** (captions or Whisper), **parametrically-sampled frames** (every Nth / 1-per-second / a time range, at any width), and the **on-screen text burned into those frames** (OCR — captions, price tags, signage). Built API-first and MCP-first for AI agents.
 
 > This repo is the **open-source client + docs**. The service itself runs at **[framefetch.net](https://framefetch.net)** — you bring a free API key (or pay per call with x402); the backend stays hosted.
 
@@ -43,13 +43,14 @@ const ff = new FrameFetch({ apiKey: process.env.FRAMEFETCH_API_KEY });
 
 const r = await ff.extract({
   url: 'https://www.youtube.com/watch?v=jNQXAC9IVRw',
-  fields: ['metadata', 'transcript', 'frames'],
+  fields: ['metadata', 'transcript', 'frames', 'text_overlay'],
   frames: { mode: 'fps', fps: 1, width: 480 },
 });
 
-console.log(r.metadata.title);   // "Me at the zoo"
-console.log(r.transcript.text);  // "Alright, so here we are…"
-console.log(r.frames.count);     // 19
+console.log(r.metadata.title);        // "Me at the zoo"
+console.log(r.transcript.text);       // "Alright, so here we are…"
+console.log(r.frames.count);          // 19
+console.log(r.textOverlay?.[0]?.text); // on-screen text detected in the first frame, if any
 ```
 
 ### Scoped helpers
@@ -60,6 +61,9 @@ await ff.transcript(url);  // captions, else Whisper
 await ff.frames(url, { mode: 'fps', fps: 1, width: 512 });
 await ff.platforms();      // capability matrix (no key)
 await ff.status();         // live service health (no key)
+
+// on-screen text (OCR) — requires "frames" alongside it, use extract() directly:
+await ff.extract({ url, fields: ['frames', 'text_overlay'], frames: { mode: 'fps', fps: 1 } });
 ```
 
 ### No signup
@@ -147,7 +151,7 @@ Full OpenAPI: [framefetch.net/openapi.json](https://framefetch.net/openapi.json)
 
 ## Links
 
-[Website](https://framefetch.net) · [Docs](https://framefetch.net/docs) · [Pricing](https://framefetch.net/pricing) · [Status](https://framefetch.net/status) · [Guide: giving an agent video data](https://framefetch.net/ai-agent-video-data)
+[Website](https://framefetch.net) · [Docs](https://framefetch.net/docs) · [Pricing](https://framefetch.net/pricing) · [Status](https://framefetch.net/status) · [Guide: giving an agent video data](https://framefetch.net/ai-agent-video-data) · [Compare vs alternatives](https://framefetch.net/compare-video-data-apis)
 
 ## License
 

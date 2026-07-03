@@ -12,12 +12,13 @@ if (!ff.apiKey) {
 } else {
   const r = await ff.extract({
     url,
-    fields: ['metadata', 'transcript', 'frames'],
+    fields: ['metadata', 'transcript', 'frames', 'text_overlay'],
     frames: { mode: 'fps', fps: 1, width: 480 },
   });
-  console.log('title   :', r.metadata?.title);
-  console.log('views   :', r.insights?.views);
-  console.log('words   :', r.transcript?.text?.split(/\s+/).length);
-  console.log('frames  :', r.frames?.count);
-  console.log('cost µ  :', r.cost?.totalMicros);
+  console.log('title    :', r.metadata?.title);
+  console.log('views    :', r.insights?.views);
+  console.log('words    :', r.transcript?.text?.split(/\s+/).length);
+  console.log('frames   :', r.frames?.count);
+  console.log('on-screen:', r.textOverlay?.find((t) => t.text)?.text ?? '(no text detected)');
+  console.log('cost µ   :', r.cost?.totalMicros);
 }
